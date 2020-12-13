@@ -274,8 +274,7 @@ class ParamBake(QtGui.QWidget):
 
     def __init__(self, parent=None):
         super().__init__()
-        self.ui_file = os.path.join(App.getUserMacroDir(True),
-                                    'forma1_3.ui')
+        self.ui_file = 'forma1_3.ui'
         f, w = gui.PySideUic.loadUiType(self.ui_file)
         self.form = f()
         self.widget = w()
