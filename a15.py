@@ -4,8 +4,8 @@ import os
 
 
 
-debug = False  # Для отладки в режиме "Текущий файл"
-if debug:
+debugFile = False  # Для отладки в режиме "Текущий файл"
+if debugFile:
     sys.path = ['/home/aou/.FreeCAD/Mod/Assembly4', '/home/aou/.FreeCAD/Mod/3DFindIT', '/home/aou/anaconda3/envs/ptn386env/Mod/Web', '/home/aou/anaconda3/envs/ptn386env/Mod/Tux', '/home/aou/anaconda3/envs/ptn386env/Mod/Test', '/home/aou/anaconda3/envs/ptn386env/Mod/TechDraw', '/home/aou/anaconda3/envs/ptn386env/Mod/Surface', '/home/aou/anaconda3/envs/ptn386env/Mod/Start', '/home/aou/anaconda3/envs/ptn386env/Mod/Spreadsheet', '/home/aou/anaconda3/envs/ptn386env/Mod/Sketcher', '/home/aou/anaconda3/envs/ptn386env/Mod/Show', '/home/aou/anaconda3/envs/ptn386env/Mod/Robot', '/home/aou/anaconda3/envs/ptn386env/Mod/ReverseEngineering', '/home/aou/anaconda3/envs/ptn386env/Mod/Raytracing', '/home/aou/anaconda3/envs/ptn386env/Mod/Points', '/home/aou/anaconda3/envs/ptn386env/Mod/Path', '/home/aou/anaconda3/envs/ptn386env/Mod/PartDesign', '/home/aou/anaconda3/envs/ptn386env/Mod/Part', '/home/aou/anaconda3/envs/ptn386env/Mod/OpenSCAD', '/home/aou/anaconda3/envs/ptn386env/Mod/MeshPart', '/home/aou/anaconda3/envs/ptn386env/Mod/Mesh', '/home/aou/anaconda3/envs/ptn386env/Mod/Measure','/home/aou/anaconda3/envs/ptn386env/Mod/Material', '/home/aou/anaconda3/envs/ptn386env/Mod/Inspection', '/home/aou/anaconda3/envs/ptn386env/Mod/Import', '/home/aou/anaconda3/envs/ptn386env/Mod/Image', '/home/aou/anaconda3/envs/ptn386env/Mod/Idf', '/home/aou/anaconda3/envs/ptn386env/Mod/Fem', '/home/aou/anaconda3/envs/ptn386env/Mod/Drawing', '/home/aou/anaconda3/envs/ptn386env/Mod/Draft', '/home/aou/anaconda3/envs/ptn386env/Mod/Complete', '/home/aou/anaconda3/envs/ptn386env/Mod/Arch', '/home/aou/anaconda3/envs/ptn386env/Mod/AddonManager', '/home/aou/anaconda3/envs/ptn386env/Mod', '/home/aou/anaconda3/envs/ptn386env/lib', '/home/aou/anaconda3/envs/ptn386env/Ext', '/home/aou/anaconda3/envs/ptn386env/bin', '/home/aou/anaconda3/envs/ptn386env/lib/python38.zip', '/home/aou/anaconda3/envs/ptn386env/lib/python3.8', '/home/aou/anaconda3/envs/ptn386env/lib/python3.8/lib-dynload', '/home/aou/.local/lib/python3.8/site-packages', '/home/aou/anaconda3/envs/ptn386env/lib/python3.8/site-packages', '/home/aou/.FreeCAD/Macro', '/home/aou/anaconda3/envs/ptn386env/Macro']
     print('__debug__')
 
@@ -349,11 +349,11 @@ class ParamBake(QtGui.QWidget):
 
 
 if __name__ == '__main__':
-    if debug:
+    if debugdebugFile:
         gui.showMainWindow()
 
     if App.ActiveDocument == None:
         App.newDocument()
     d = ParamBake()
-    if debug:
+    if debugFile:
         gui.exec_loop()
