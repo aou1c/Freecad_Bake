@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>410</width>
-    <height>459</height>
+    <width>405</width>
+    <height>490</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -132,7 +132,7 @@
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>280</y>
+     <y>290</y>
      <width>81</width>
      <height>18</height>
     </rect>
@@ -148,7 +148,7 @@
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>320</y>
+     <y>340</y>
      <width>91</width>
      <height>18</height>
     </rect>
@@ -289,7 +289,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>420</y>
+     <y>450</y>
      <width>381</width>
      <height>34</height>
     </rect>
@@ -328,7 +328,7 @@
     <bool>true</bool>
    </property>
    <property name="decimals">
-    <number>0</number>
+    <number>2</number>
    </property>
    <property name="minimum">
     <double>0.000000000000000</double>
@@ -347,7 +347,7 @@
    <property name="geometry">
     <rect>
      <x>140</x>
-     <y>270</y>
+     <y>280</y>
      <width>91</width>
      <height>32</height>
     </rect>
@@ -356,7 +356,7 @@
     <bool>true</bool>
    </property>
    <property name="decimals">
-    <number>0</number>
+    <number>2</number>
    </property>
    <property name="minimum">
     <double>0.000000000000000</double>
@@ -375,7 +375,7 @@
    <property name="geometry">
     <rect>
      <x>140</x>
-     <y>310</y>
+     <y>330</y>
      <width>91</width>
      <height>32</height>
     </rect>
@@ -404,7 +404,7 @@
     <rect>
      <x>240</x>
      <y>230</y>
-     <width>151</width>
+     <width>111</width>
      <height>31</height>
     </rect>
    </property>
@@ -429,13 +429,39 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>370</y>
+     <y>420</y>
      <width>381</width>
      <height>23</height>
     </rect>
    </property>
    <property name="value">
     <number>0</number>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBoxCAlcShov">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>380</y>
+     <width>151</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Recalculate shov</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox2_2">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>290</y>
+     <width>151</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string> + width brick</string>
    </property>
   </widget>
  </widget>

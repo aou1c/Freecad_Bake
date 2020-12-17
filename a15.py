@@ -22,21 +22,25 @@ Height = 65
 shov = 3
 
 # Целое количество кирпичей по X + половинка(ширина кирпича)
-FullHoriz = [5, 0]
-# Целое количество кирпичей по Y + половинка(ширина кирпича)
-FullVertical = [2, 1]
+FullHoriz = [5.0, 0]
+# Целое количество кирпичей по Y
+#  + половинка(ширина кирпича)
+#  + половинка(ширина кирпича)
+FullVertical = [2.0, 1, 0]
 
 CountRow = 1  # Количество рядов/2
 
 
 StartFromFreecad = False
 
-class PropertyRow:
-    def __init__(self, posX, posY, count, shov):
+class PropertyRow():
+    def __init__(self, posX, posY, count, shov, ext = 0):
         self.__posX = posX
         self.__posY = posY
         self.__count = count
         self.__shov = shov
+        self.__ext = ext
+        
 
     @property
     def posX(self):
@@ -54,10 +58,14 @@ class PropertyRow:
     def shov(self):
         return self.__shov
 
+    @property
+    def ext(self):
+        return self.__ext
+
 
 class BrowserHandler(QtCore.QObject):
     signalForProgress = QtCore.Signal(int, int)
-
+    
     def MakeBrake(self,par):
 
         Length = int(par.form.BrikLength.value())
@@ -78,6 +86,18 @@ class BrowserHandler(QtCore.QObject):
         else:
             FullVertical[1] = 0
 
+        if par.form.checkBoxCAlcShov.checkState() == QtCore.Qt.Checked:
+            CAlcShov = True
+        else:
+            CAlcShov = False
+
+        if (par.form.checkBox2.checkState() == QtCore.Qt.Checked):
+            FullVertical[2] = 1
+        else:
+            FullVertical[2] = 0
+
+
+
         NumHoriz = FullHoriz[0]
         numVertical = FullVertical[0]
 
@@ -88,37 +108,8 @@ class BrowserHandler(QtCore.QObject):
 
         acord = []
 
-        if (FullHoriz[1] == 0 and FullVertical[1]) == 0:
-            ######################################################
-            # Размер печи
-            # X: целое количество кирпичей
-            # Y: целое количество кирпичей
-            ######################################################
 
-            DistanseX = NumHoriz*Length+shov*(NumHoriz-1)
-            DistanseY = numVertical*Length+(numVertical-1)*shov - Width
-
-            shovH = ((DistanseX - Width*2) - Length*(NumHoriz-1))/NumHoriz
-            shovV = ((numVertical*Length+(numVertical-1)*shov - Width*2) -
-                    Length*(numVertical-1))/numVertical
-
-            difHorizontRow1 = PropertyRow(0, 0,                     NumHoriz, shov)
-            difHorizontRow2 = PropertyRow(0, DistanseY,             NumHoriz, shov)
-            difVerticalRow1 = PropertyRow(
-                Width, Width + shovV,     numVertical-1, shovV)
-            difVerticalRow2 = PropertyRow(
-                DistanseX, Width + shovV, numVertical-1, shovV)
-
-            difHorizontRow3 = PropertyRow(
-                Width + shovH, 0,         NumHoriz-1, shovH)
-            difHorizontRow4 = PropertyRow(
-                Width + shovH, DistanseY, NumHoriz-1, shovH)
-            difVerticalRow3 = PropertyRow(
-                Width, 0,                 numVertical, shov)
-            difVerticalRow4 = PropertyRow(
-                DistanseX, 0,             numVertical, shov)
-
-        if (FullHoriz[1] == 1 and FullVertical[1] == 1):
+        if (FullHoriz[1] == 1 and FullVertical[1] == 1 and FullVertical[2] == 1):
             ######################################################
             # Размер печи
             # X: целое + полкирпича(ширина кирпича)
@@ -126,45 +117,104 @@ class BrowserHandler(QtCore.QObject):
             ######################################################
 
             DistanseX = NumHoriz*Length+shov*(NumHoriz)
-            DistanseY = numVertical*Length+(numVertical)*shov
+            DistanseY = numVertical*Length+(numVertical)*shov + Width + shov
 
-            difHorizontRow1 = PropertyRow(0, 0,                     NumHoriz, shov)
+            ext = (Length + Width*2) + shov - Length
+            print('ext' + str(ext))
+
+            difHorizontRow1 = PropertyRow(Width + shov, 0,         NumHoriz, shov)
             difHorizontRow2 = PropertyRow(Width + shov, DistanseY, NumHoriz, shov)
-            difVerticalRow1 = PropertyRow(
-                Width, Width + shov,     numVertical, shov)
-            difVerticalRow2 = PropertyRow(DistanseX+Width, 0, numVertical, shov)
+            difVerticalRow1 = PropertyRow(Width, 0,     numVertical, shov, ext)
+            difVerticalRow2 = PropertyRow(DistanseX+Width, Width + shov, numVertical, shov)
 
-            difHorizontRow3 = PropertyRow(0, DistanseY,
-                                        NumHoriz, shov)
-            difHorizontRow4 = PropertyRow(Width + shov, 0, NumHoriz, shov)
-            difVerticalRow3 = PropertyRow(Width, 0,     numVertical, shov)
-            difVerticalRow4 = PropertyRow(
-                DistanseX+Width, Width + shov, numVertical, shov)
+            difHorizontRow3 = PropertyRow(0, DistanseY,NumHoriz, shov)
+            difHorizontRow4 = PropertyRow(0, 0, NumHoriz, shov)
+            difVerticalRow3 = PropertyRow(Width, Width + shov,     numVertical, shov)
+            difVerticalRow4 = PropertyRow(DistanseX+Width, 0, numVertical, shov, ext)
 
-        if (FullHoriz[1] == 0 and FullVertical[1] == 1):
-            ######################################################
-            # Размер печи
-            # X: целое количество кирпичей
-            # Y: целое количество кирпичей  + полкирпича(ширина кирпича)
-            ######################################################
 
-            DistanseX = NumHoriz*Length+shov*(NumHoriz-1)
-            DistanseY = numVertical*Length+(numVertical)*shov
 
-            shovH = ((DistanseX - Width*2) - Length*(NumHoriz-1))/NumHoriz
 
-            difHorizontRow1 = PropertyRow(0, 0,   NumHoriz, shov)
-            difHorizontRow2 = PropertyRow(
-                Width + shovH, DistanseY, NumHoriz-1, shovH)
-            difVerticalRow1 = PropertyRow(
-                Width, Width + shov,     numVertical, shov)
-            difVerticalRow2 = PropertyRow(
-                DistanseX, Width + shov, numVertical, shov)
+        else:
+            if (FullHoriz[1] == 0 and FullVertical[1]) == 0:
+                ######################################################
+                # Размер печи
+                # X: целое количество кирпичей
+                # Y: целое количество кирпичей
+                ######################################################
 
-            difHorizontRow3 = PropertyRow(0, DistanseY,  NumHoriz, shov)
-            difHorizontRow4 = PropertyRow(Width + shovH, 0, NumHoriz-1, shovH)
-            difVerticalRow3 = PropertyRow(Width, 0, numVertical, shov)
-            difVerticalRow4 = PropertyRow(DistanseX, 0, numVertical, shov)
+                DistanseX = NumHoriz*Length+shov*(NumHoriz-1)
+                DistanseY = numVertical*Length+(numVertical-1)*shov - Width
+
+                if CAlcShov:
+                    shovH = ((DistanseX - Width*2) - Length*(NumHoriz-1))/NumHoriz
+                    shovV = ((numVertical*Length+(numVertical-1)*shov - Width*2) - Length*(numVertical-1))/numVertical
+                    ext = 0
+                else:
+                    shovH = shov
+                    ext = (DistanseX - Width*2) - Length*(NumHoriz-1) - (NumHoriz+1)*shov
+
+
+                difHorizontRow1 = PropertyRow(0, 0,                     NumHoriz, shov)
+                difHorizontRow2 = PropertyRow(0, DistanseY,             NumHoriz, shov)
+                difVerticalRow1 = PropertyRow(Width, Width + shovV,     numVertical-1, shovV, ext)
+                difVerticalRow2 = PropertyRow(DistanseX, Width + shovV, numVertical-1, shovV, ext)
+
+                difHorizontRow3 = PropertyRow(Width + shovH, 0, NumHoriz-1, shovH, ext)
+                difHorizontRow4 = PropertyRow(Width + shovH, DistanseY, NumHoriz-1, shovH, ext)
+                difVerticalRow3 = PropertyRow(Width, 0,                 numVertical, shov)
+                difVerticalRow4 = PropertyRow(DistanseX, 0,             numVertical, shov)
+
+            if (FullHoriz[1] == 1 and FullVertical[1] == 1):
+                ######################################################
+                # Размер печи
+                # X: целое + полкирпича(ширина кирпича)
+                # Y: целое количество кирпичей  + полкирпича(ширина кирпича)
+                ######################################################
+
+                DistanseX = NumHoriz*Length+shov*(NumHoriz)
+                DistanseY = numVertical*Length+(numVertical)*shov
+
+                difHorizontRow1 = PropertyRow(0, 0,                     NumHoriz, shov)
+                difHorizontRow2 = PropertyRow(Width + shov, DistanseY, NumHoriz, shov)
+                difVerticalRow1 = PropertyRow(
+                    Width, Width + shov,     numVertical, shov)
+                difVerticalRow2 = PropertyRow(DistanseX+Width, 0, numVertical, shov)
+
+                difHorizontRow3 = PropertyRow(0, DistanseY,
+                                            NumHoriz, shov)
+                difHorizontRow4 = PropertyRow(Width + shov, 0, NumHoriz, shov)
+                difVerticalRow3 = PropertyRow(Width, 0,     numVertical, shov)
+                difVerticalRow4 = PropertyRow(
+                    DistanseX+Width, Width + shov, numVertical, shov)
+
+            if (FullHoriz[1] == 0 and FullVertical[1] == 1):
+                ######################################################
+                # Размер печи
+                # X: целое количество кирпичей
+                # Y: целое количество кирпичей  + полкирпича(ширина кирпича)
+                ######################################################
+
+                DistanseX = NumHoriz*Length+shov*(NumHoriz-1)
+                DistanseY = numVertical*Length+(numVertical)*shov
+
+                if CAlcShov:
+                    shovH = ((DistanseX - Width*2) - Length*(NumHoriz-1))/NumHoriz
+                    ext = 0
+                else:
+                    shovH = shov
+                    ext = (DistanseX - Width*2) - Length*(NumHoriz-1) - (NumHoriz+1)*shov
+                    print(ext)
+
+                difHorizontRow1 = PropertyRow(0, 0,   NumHoriz, shov)
+                difHorizontRow2 = PropertyRow(Width + shovH, DistanseY, NumHoriz-1, shovH, ext)
+                difVerticalRow1 = PropertyRow(Width, Width + shov,     numVertical, shov)
+                difVerticalRow2 = PropertyRow(DistanseX, Width + shov, numVertical, shov)
+
+                difHorizontRow3 = PropertyRow(0, DistanseY,  NumHoriz, shov)
+                difHorizontRow4 = PropertyRow(Width + shovH, 0, NumHoriz-1, shovH, ext)
+                difVerticalRow3 = PropertyRow(Width, 0, numVertical, shov)
+                difVerticalRow4 = PropertyRow(DistanseX, 0, numVertical, shov)
 
         if (FullHoriz[1] == 1 and FullVertical[1] == 0):
             msg = QtGui.QMessageBox()
@@ -174,6 +224,11 @@ class BrowserHandler(QtCore.QObject):
             msg.setDetailedText("Вместо: Длина печи + ширина кирпича с Ширина печи, используйте Ширина печи + ширина кирпича с Длина печи")
             retval = msg.exec_()
             return 0
+
+
+
+
+
 
         HeightFull = Height + shov
 
@@ -187,8 +242,11 @@ class BrowserHandler(QtCore.QObject):
             startX = dif.posX
             startY = dif.posY
             for n in range(dif.count):
-                coord.append([startX, startY, Z*HeightFull, 0])
+                coord.append([startX, startY, Z*HeightFull, 0, 0])
                 startX += Length + dif.shov
+            if dif.ext > 0:
+                coord.append([startX, startY, Z*HeightFull, 0, dif.ext])
+
             return coord
 
         def MakeVertical(dif, Z):
@@ -196,8 +254,10 @@ class BrowserHandler(QtCore.QObject):
             startX = dif.posX
             startY = dif.posY
             for n in range(dif.count):
-                coord.append([startX, startY, Z*HeightFull, 1])
+                coord.append([startX, startY, Z*HeightFull, 1, 0])
                 startY += Length + dif.shov
+            if dif.ext > 0:
+                coord.append([startX, startY, Z*HeightFull, 1, dif.ext])
             return coord
 
         numRow = 0
@@ -234,16 +294,17 @@ class BrowserHandler(QtCore.QObject):
         countBlocks = 1
         countRows = 0
         for row in acord:
-            Compound = App.activeDocument().addObject(
-                "Part::Compound", "Compound_"+"row"+str(countRows))
+            Compound = App.activeDocument().addObject("Part::Compound", "Compound_"+"row"+str(countRows))
             Links = []
             for par in row:
-                Object = App.ActiveDocument.addObject(
-                    "Part::Box", "Box" + str(countBlocks))
-                Object .Label = "Куб" + str(countBlocks)
-                Object .Length = Length_Bl
-                Object .Width = Width_Bl
-                Object .Height = Height_Bl
+                Object = App.ActiveDocument.addObject("Part::Box", "Box" + str(countBlocks))
+                Object.Label = "Куб" + str(countBlocks)
+                if (par[4] == 0):
+                    Object.Length = Length_Bl
+                else:
+                    Object .Length = str(par[4])+' mm'
+                Object.Width = Width_Bl
+                Object.Height = Height_Bl
                 countBlocks += 1
 
                 if (par[3] == 0):
@@ -313,6 +374,8 @@ class ParamBake(QtGui.QWidget):
         self.form.label_9.setText("Шов")
         self.form.checkBox1.setText(" + ширина кирпича")
         self.form.checkBox2.setText(" + ширина кирпича")
+        self.form.checkBox2_2.setText(" + ширина кирпича")
+        self.form.checkBoxCAlcShov.setText("Растягивать швы")
 
         self.form.pushButtonCreate.setText("Создать печь")
 
