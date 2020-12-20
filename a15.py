@@ -92,7 +92,7 @@ class BrowserHandler(QtCore.QObject):
         else:
             CAlcShov = False
 
-        if (par.form.checkBox2.checkState() == QtCore.Qt.Checked):
+        if (par.form.checkBox2_2.checkState() == QtCore.Qt.Checked):
             FullVertical[2] = 1
         else:
             FullVertical[2] = 0
@@ -137,7 +137,7 @@ class BrowserHandler(QtCore.QObject):
 
 
         else:
-            if (FullHoriz[1] == 0 and FullVertical[1]) == 0:
+            if (FullHoriz[1] == 0 and FullVertical[1] == 0):
                 ######################################################
                 # Размер печи
                 # X: целое количество кирпичей
